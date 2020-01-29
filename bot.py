@@ -80,7 +80,7 @@ async def cinema(message: types.Message, *args):
                             question = json.loads(tran)['text'][0][:-2]
             except Exception:
                 pass
-            url = 'https://duckduckgo.com/html?q={}'.format(urllib.parse.quote(question + ' иви'))
+            url = 'https://google.com/search?q={}'.format(urllib.parse.quote(question + ' иви'))
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, headers=headers) as resp:
                     text = await resp.text()
@@ -134,7 +134,7 @@ async def cinema(message: types.Message, *args):
             url = 'https://vk.com/video?len=2&q={}'.format(urllib.parse.quote(question))
             s = 'Описание не нашлось.\nСмотреть: ' + url
             try:
-                url1 = 'https://duckduckgo.com/html?q={}'.format(urllib.parse.quote(question + ' kinogo.by'))
+                url1 = 'https://google.com/search?q={}'.format(urllib.parse.quote(question + ' kinogo.by'))
                 async with aiohttp.ClientSession() as session:
                     async with session.get(url1, headers=headers) as resp:
                         text = await resp.text()
@@ -177,13 +177,13 @@ async def imdb(message, headers):
         url = 'https://vk.com/video?len=2&q={}'.format(urllib.parse.quote(question))
         s += '\nСмотреть:' + url
         try:
-            url1 = 'https://duckduckgo.com/html?q={}'.format(urllib.parse.quote(question + ' kinogo.by'))
+            url1 = 'https://google.com/search?q={}'.format(urllib.parse.quote(question + ' ivi.ru'))
             async with aiohttp.ClientSession() as session:
                 async with session.get(url1, headers=headers) as resp:
                     text = await resp.text()
             g = re.findall(r'(?<=class="result__a" href=").+(?="><b>)', text)
             url = g[0]
-            if url == 'https://kinogo.by/':
+            if url == 'https://ivi.ru/':
                 url = g[1]
             if url.startswith('https://kin'):
                 s += '\n' + url
