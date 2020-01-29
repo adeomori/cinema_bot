@@ -72,7 +72,7 @@ async def send_welcome(message: types.Message):
         "Hello!\n   I would like to help you find information about the film.\n\n<i>Possible commands:</i> "
         "\n<b>Movie title</b>:"
         " to search film, its description and ratings \n<b>/random</b>: to get random film "
-        " \n\n <i>example:</i> \n  веном\n  /random",
+        " \n\n <i>example:</i> \n  веном\n Команды, доступные боту:\n /random - предлагает случайный фильм\n /help",
         parse_mode='HTML')
 
 
