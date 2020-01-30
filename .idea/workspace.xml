@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0b2ff96e-4dc9-4e8d-805a-0ce56833a3e4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +38,35 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
+  <component name="RunManager">
+    <configuration name="bot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="bot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bot.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.bot" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
       <list>
@@ -61,7 +91,7 @@
       <updated>1580225202044</updated>
       <workItem from="1580225206461" duration="6581000" />
       <workItem from="1580255413821" duration="148000" />
-      <workItem from="1580295140963" duration="11403000" />
+      <workItem from="1580295140963" duration="14982000" />
     </task>
     <servers />
   </component>
@@ -73,9 +103,28 @@
       <screen x="0" y="23" width="1680" height="954" />
     </state>
     <state x="759" y="323" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1680.954@0.23.1680.954" timestamp="1580227298493" />
+    <state width="2518" height="358" key="GridCell.Tab.0.bottom" timestamp="1580408918979">
+      <screen x="1680" y="0" width="2560" height="1440" />
+    </state>
+    <state width="2518" height="358" key="GridCell.Tab.0.bottom/0.0.1680.1050/1680.0.2560.1440@1680.0.2560.1440" timestamp="1580408918979" />
+    <state width="2518" height="358" key="GridCell.Tab.0.center" timestamp="1580408918977">
+      <screen x="1680" y="0" width="2560" height="1440" />
+    </state>
+    <state width="2518" height="358" key="GridCell.Tab.0.center/0.0.1680.1050/1680.0.2560.1440@1680.0.2560.1440" timestamp="1580408918977" />
+    <state width="2518" height="358" key="GridCell.Tab.0.left" timestamp="1580408918976">
+      <screen x="1680" y="0" width="2560" height="1440" />
+    </state>
+    <state width="2518" height="358" key="GridCell.Tab.0.left/0.0.1680.1050/1680.0.2560.1440@1680.0.2560.1440" timestamp="1580408918976" />
+    <state width="2518" height="358" key="GridCell.Tab.0.right" timestamp="1580408918978">
+      <screen x="1680" y="0" width="2560" height="1440" />
+    </state>
+    <state width="2518" height="358" key="GridCell.Tab.0.right/0.0.1680.1050/1680.0.2560.1440@1680.0.2560.1440" timestamp="1580408918978" />
     <state x="517" y="332" key="com.intellij.ide.util.TipDialog" timestamp="1580255414400">
       <screen x="0" y="23" width="1680" height="954" />
     </state>
     <state x="517" y="332" key="com.intellij.ide.util.TipDialog/0.23.1680.954@0.23.1680.954" timestamp="1580255414400" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/bot$bot.coverage" NAME="bot Coverage Results" MODIFIED="1580408918956" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

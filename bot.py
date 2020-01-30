@@ -8,9 +8,13 @@ import difflib
 import os
 from aiogram import Bot, Dispatcher, executor, types
 from langdetect import detect
+from bs4 import BeautifulSoup
 from random import choice
 
-KEY_TRANSLATE = os.environ['KEY_TRANSLATE']
+
+GOOGLE_KEY = 'AIzaSyA9CvGYZwqZvnwuNPlyj4bB5Xf4H0dyqjM'
+KEY_TRANSLATE = os.environ.get('KEY_TRANSLATE',
+                               'trnsl.1.1.20200127T183129Z.78b55e8b4e771851.2b3c7bc51353baeaba46fd294621a1d787cded42')
 proxy_host = os.environ.get('PROXY', None)
 proxy_credentials = os.environ.get('PROXY_CREDS', None)
 if proxy_credentials:
@@ -19,7 +23,7 @@ if proxy_credentials:
 else:
     proxy_auth = None
 
-bot = Bot(token=os.environ['BOT_TOKEN'],
+bot = Bot(token=os.environ.get('BOT_TOKEN', '600735080:AAHCtSng410JMbkQ3_qpD-Bh77bE0sl7Kgs'),
           proxy=proxy_host, proxy_auth=proxy_auth)
 dp = Dispatcher(bot)
 
@@ -81,6 +85,9 @@ async def false(message):
         await cinema(message)
 
 
+# async def find_on_ivi(film):
+
+
 @dp.message_handler()
 async def cinema(message: types.Message, *args):
     headers = {
@@ -114,8 +121,25 @@ async def cinema(message: types.Message, *args):
             await imdb(message, headers)
 
         except Exception:
-            url = 'https://vk.com/video?len=2&q={}'.format(urllib.parse.quote(question))
-            s = 'Описание не нашлось.\nСмотреть: ' + url
+
+            # url = 'https://vk.com/video?len=2&q={}'.format(urllib.parse.quote(question))
+            try:
+                url = 'http://ivi.ru/search/?q={}'.format(message["text"])
+                print(url)
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(url) as resp:
+                        tran = await resp.text()
+                        # question = json.loads(tran)['text'][0][:-2]
+                # resp = re.get(url)
+                soap = BeautifulSoup(tran)
+                # print(soap)
+                aa = soap.findAll('li', {'class': 'gallery__item'})
+                # print(aa)
+                ivi_url = 'http://ivi.ru' + re.findall(r'(?<=href=")[\w/]+(?=")', str(aa))[0]
+                s = 'Этот фильм есть на ivi: \n' + ivi_url
+            except:
+                url = 'https://vk.com/video?len=2&q={}'.format(urllib.parse.quote(question))
+                s = 'Описание не нашлось.\nСмотреть: ' + url
             await bot.send_message(message.chat.id, s, parse_mode='HTML')
 
 
