@@ -24,10 +24,6 @@ bot = Bot(token=os.environ['BOT_TOKEN'],
 dp = Dispatcher(bot)
 
 
-# @dp.message_handler(commands=['start', 'help'])
-# async def send_welcome(message: types.Message):
-#     await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
-
 
 @dp.message_handler(commands=['ref'])
 async def create_random_id(message):
@@ -111,76 +107,15 @@ async def cinema(message: types.Message, *args):
                             question = json.loads(tran)['text'][0][:-2]
             except Exception:
                 pass
-        #     url = 'https://duckduckgo.com/html?q={}'.format(urllib.parse.quote(question + ' иви'))
-        #     async with aiohttp.ClientSession() as session:
-        #         async with session.get(url, headers=headers) as resp:
-        #             text = await resp.text()
-        #     q = re.findall(r'(?<=https://www.ivi.ru/watch/)[\w]+', text)
-        #     if not q:
-        #         url = 'https://www.ivi.ru/search/?q={}'.format(urllib.parse.quote(question))
-        #         async with aiohttp.ClientSession() as session:
-        #             async with session.get(url, headers=headers) as resp:
-        #                 text = await resp.text()
-        #                 q = re.findall(r'(?<=data-content-id=")[\w\d]+(?=")', text)
-        #     url_next = 'https://www.ivi.tv/watch/' + q[0] + '/description' if q[
-        #         0].isdigit() else 'https://www.ivi.tv/watch/' + q[0]
-        #     async with aiohttp.ClientSession() as session:
-        #         async with session.get(url_next, headers=headers) as resp:
-        #             text_next = await resp.text()
-        #     name = re.findall(r'(?<=<meta name="title" content=").+(?=\))', text_next)
-        #     if not name:
-        #         name = re.findall(r'(?<=<meta name="title" content=")[\s\w\d]+', text_next)
-        #     check = name[0].lower()
-        #     check = check.replace('смотреть онлайн бесплатно все серии подряд в хорошем 720 hd качестве', '')
-        #     check = check.replace('смотреть онлайн бесплатно все серии подряд в хорошем', '')
-        #     check = check.replace('смотреть онлайн все серии подряд в хорошем 720 hd качестве', '')
-        #     check = check.replace('и дополнительные материалы', '')
-        #     check = check.replace('смотреть онлайн', '')
-        #     check = check.replace('фильм ', '')
-        #     check = check.replace('сериал ', '')
-        #     if check[-2].isdigit():
-        #         check = check[:-6]
-        #     similary = difflib.SequenceMatcher(a=check, b=question.lower()).ratio()
-        #     if similary < 0.53:
-        #         raise IndexError
-        #     if similary > 0.8 and similary < 0.9 and not question[-1].isdigit():
-        #         s = 'Возможно вы имели ввиду\n'
-        #     if similary < 0.8:
-        #         s = 'Возможно вы ищите\n'
-        # else:
-        #     q = [args[0]]
-        #     url_next = 'https://www.ivi.tv/watch/' + q[0] + '/description' if q[
-        #         0].isdigit() else 'https://www.ivi.tv/watch/' + q[0]
-        #     async with aiohttp.ClientSession() as session:
-        #         async with session.get(url_next, headers=headers) as resp:
-        #             text_next = await resp.text()
-        #     name = re.findall(r'(?<=<meta name="title" content=").+(?=\))', text_next)
-        #     if not name:
-        #         name = re.findall(r'(?<=<meta name="title" content=")[\s\w\d]+', text_next)
-        # await parsfilmfromivi(message, text_next, name, headers, s)
+        await imdb(message, headers)
     except Exception:
         question = message.text
-        # try:
-        #     await parsfilmfromkinogo(message, question, headers)
-        # except Exception:
         try:
             await imdb(message, headers)
+
         except Exception:
             url = 'https://vk.com/video?len=2&q={}'.format(urllib.parse.quote(question))
             s = 'Описание не нашлось.\nСмотреть: ' + url
-            # try:
-            #     url1 = 'https://duckduckgo.com/html?q={}'.format(urllib.parse.quote(question + ' kinogo.by'))
-            #     async with aiohttp.ClientSession() as session:
-            #         async with session.get(url1, headers=headers) as resp:
-            #             text = await resp.text()
-            #     g = re.findall(r'(?<=class="result__a" href=").+(?="><b>)', text)
-            #     url = g[0]
-            #     if url == 'https://kinogo.by/':
-            #         url = g[1]
-            #     if url.startswith('https://kin'):
-            #         s += '\n' + url
-            # except Exception:
-            #     pass
             await bot.send_message(message.chat.id, s, parse_mode='HTML')
 
 
@@ -211,19 +146,6 @@ async def imdb(message, headers):
             'imdbRating') + '\nPlot: ' + values.get('Plot') + '\n\n' + values.get('Poster')
         url = 'https://vk.com/video?len=2&q={}'.format(urllib.parse.quote(question))
         s += '\nСмотреть:' + url
-        # try:
-        #     url1 = 'https://duckduckgo.com/html?q={}'.format(urllib.parse.quote(question + ' kinogo.by'))
-        #     async with aiohttp.ClientSession() as session:
-        #         async with session.get(url1, headers=headers) as resp:
-        #             text = await resp.text()
-        #     g = re.findall(r'(?<=class="result__a" href=").+(?="><b>)', text)
-        #     url = g[0]
-        #     if url == 'https://kinogo.by/':
-        #         url = g[1]
-        #     if url.startswith('https://kin'):
-        #         s += '\n' + url
-        # except Exception:
-        #     pass
         await bot.send_message(message.chat.id, s, parse_mode='HTML')
     else:
         raise NameError
