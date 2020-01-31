@@ -1,3 +1,4 @@
+import time
 import urllib.parse
 import aiohttp
 import re
@@ -19,9 +20,10 @@ if proxy_credentials:
 else:
     proxy_auth = None
 
-bot = Bot(token=os.environ.get('BOT_TOKEN', '600735080:AAHCtSng410JMbkQ3_qpD-Bh77bE0sl7Kgs'),
+bot = Bot(token=os.environ.get('BOT_TOKEN', '1020403598:AAHZbLHpPteROXfZ-XZ7BQ4joWdGGmp0EGQ'),
           proxy=proxy_host, proxy_auth=proxy_auth)
 dp = Dispatcher(bot)
+
 
 @dp.message_handler(commands=['help'])
 async def send_welcome(message: types.Message):
@@ -35,7 +37,9 @@ async def send_welcome(message: types.Message):
 @dp.message_handler()
 async def false(message):
     if message.text.startswith('/'):
-        await bot.send_message(message.chat.id, 'У меня нет такой команды, попробуйте \n/help для просмотра возможностей', parse_mode='HTML')
+        await bot.send_message(message.chat.id,
+                               'У меня нет такой команды, попробуйте \n/help для просмотра возможностей',
+                               parse_mode='HTML')
     else:
         await cinema(message)
 
@@ -48,28 +52,44 @@ async def cinema(message: types.Message):
     headers = {
         'User-Agent': 'Mozilla/5.0'
     }
+    s = ' '
     try:
-        try:
-            lang = detect(message.text)
-            if  lang != 'uk':
-                ADRESS = "https://translate.yandex.net/api/v1.5/tr.json/translate"
-                KEY = KEY_TRANSLATE
-                params = {
-                    "key": KEY,
-                    "text": message.text,
-                    "lang": "ru-en",
-                    "format": "plain"
-                }
-                async with aiohttp.ClientSession() as session:
-                    async with session.post(ADRESS, data=params) as resp:
-                        tran = await resp.text()
-                        quest = json.loads(tran)['text'][0]
-                        print(quest)
-        except Exception:
-            pass
-        message['text'] = quest
-        # await parse_anime(message, headers)
-        await imdb(message, headers)
+        ADRESS = "https://translate.yandex.net/api/v1.5/tr.json/detect"
+        KEY = KEY_TRANSLATE
+        params = {
+            "key": KEY,
+            "text": message.text,
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(ADRESS, data=params) as resp:
+                tran = await resp.json()
+        lang = tran["lang"]
+        print(lang)
+        if lang != 'en':
+            ADRESS = "https://translate.yandex.net/api/v1.5/tr.json/translate"
+            KEY = KEY_TRANSLATE
+            params = {
+                "key": KEY,
+                "text": message.text,
+                "lang": "ru-en",
+                "format": "plain"
+            }
+            async with aiohttp.ClientSession() as session:
+                async with session.post(ADRESS, data=params) as resp:
+                    tran = await resp.text()
+                    quest = json.loads(tran)['text'][0]
+                    print(quest)
+            try:
+                inf = await kinopoisk(message, headers)
+                s += 'Информацию об интересующем вас фильме на русском вы найдете по адресу\n'
+                s += 'https://www.kinopoisk.ru/{}'.format(inf) + '\n'
+                await bot.send_message(message.chat.id, s, parse_mode='HTML')
+            except Exception:
+                pass
+
+        else:
+            await imdb(message, headers)
+
         await get_ivi_films(message, headers)
     except Exception:
         question = message.text
@@ -111,7 +131,8 @@ async def get_ivi_films(message, headers):
         raise NameError
     await bot.send_message(message.chat.id, s, parse_mode='HTML')
 
-#к сожалению на сайт не пускает
+
+# к сожалению на сайт не пускает
 @dp.message_handler()
 async def parse_anime(message, headers):
     film = message['text']
@@ -155,6 +176,20 @@ async def parse_anime(message, headers):
     print(msg)
     await bot.send_message(message.chat.id, msg, parse_mode='HTML')
 
+
+@dp.message_handler()
+async def kinopoisk(message, headers):
+    url = 'https://www.kinopoisk.ru/index.php?kp_query={}'.format(message.text)
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, headers=headers) as resp:
+            tran = await resp.text()
+    soap = BeautifulSoup(tran)
+
+    main_search_result = soap.findAll('div', {'class': 'element most_wanted'})[0]
+    adress = main_search_result.findAll('li')
+    kinopoiskid = int(re.findall(r'data-id=(.*?) ', str(adress))[0][1:-1])
+    return 'film/' + str(kinopoiskid)
+
 @dp.message_handler()
 async def imdb(message, headers):
     film = message.text
@@ -171,14 +206,14 @@ async def imdb(message, headers):
             async with session.get(url, headers=headers) as resp:
                 response = await resp.text()
         values = json.loads(response)
-        s = 'Название: ' + values.get('Title')\
-            + '\nГод выпуска: ' + values.get('Year')\
-            + '\nДлительность:' + values.get('Runtime')\
-            + '\nДиректор: ' + values.get('Director')\
-            + '\nРежиссер: ' + values.get('Actors')\
+        s = 'Название: ' + values.get('Title') \
+            + '\nГод выпуска: ' + values.get('Year') \
+            + '\nДлительность:' + values.get('Runtime') \
+            + '\nДиректор: ' + values.get('Director') \
+            + '\nРежиссер: ' + values.get('Actors') \
             + '\nСтрана: ' + values.get('Country') \
-            + '\nРейтинг IMDb:' + values.get('imdbRating')\
-            + '\nОписание: ' + values.get('Plot')\
+            + '\nРейтинг IMDb:' + values.get('imdbRating') \
+            + '\nОписание: ' + values.get('Plot') \
             + '\n\n' + values.get('Poster')
         await bot.send_message(message.chat.id, s, parse_mode='HTML')
     else:
