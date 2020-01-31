@@ -25,7 +25,7 @@ bot = Bot(token=os.environ.get('BOT_TOKEN', '1020403598:AAHZbLHpPteROXfZ-XZ7BQ4j
 dp = Dispatcher(bot)
 
 
-@dp.message_handler(commands=['help'])
+@dp.message_handler(commands=['help', 'start'])
 async def send_welcome(message: types.Message):
     await message.reply(
         "<b>Привет!</b>\nЭтот бот поможет вам найти информацию о\nвашем любимом фильме на imdb и посмотреть его на\n"
@@ -101,7 +101,7 @@ async def cinema(message: types.Message):
                 await get_ivi_films(message, headers)
             except Exception:
                 url = 'https://vk.com/video?len=2&q={}'.format(urllib.parse.quote(question))
-                s = 'Описание не нашлось.\nСмотреть: ' + url
+                s = 'Ссылок не нашлось.\nВозможно, вы сможете увдиеть его тут: ' + url
                 await bot.send_message(message.chat.id, s, parse_mode='HTML')
 
 
