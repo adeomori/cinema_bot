@@ -8,10 +8,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from langdetect import detect
 from bs4 import BeautifulSoup
 
-
-GOOGLE_KEY = 'AIzaSyA9CvGYZwqZvnwuNPlyj4bB5Xf4H0dyqjM'
-KEY_TRANSLATE = os.environ.get('KEY_TRANSLATE',
-                               'trnsl.1.1.20200127T183129Z.78b55e8b4e771851.2b3c7bc51353baeaba46fd294621a1d787cded42')
+KEY_TRANSLATE = os.environ.get('KEY_TRANSLATE')
 proxy_host = os.environ.get('socks5://py.manytask.org:1080')
 proxy_credentials = os.environ.get('student:JGNICRoFHftRqllRh3O0xi0sfbhmLyt7')
 if proxy_credentials:
@@ -20,7 +17,7 @@ if proxy_credentials:
 else:
     proxy_auth = None
 
-bot = Bot(token=os.environ.get('BOT_TOKEN', '1020403598:AAHZbLHpPteROXfZ-XZ7BQ4joWdGGmp0EGQ'),
+bot = Bot(token=os.environ.get('BOT_TOKEN'),
           proxy=proxy_host, proxy_auth=proxy_auth)
 dp = Dispatcher(bot)
 
@@ -108,7 +105,6 @@ async def cinema(message: types.Message):
 @dp.message_handler()
 async def get_ivi_films(message, headers):
     url = 'http://ivi.ru/search/?q={}'.format(message["text"])
-    print(url)
     async with aiohttp.ClientSession() as session:
         async with session.post(url, headers=headers) as resp:
             tran = await resp.text()
@@ -132,13 +128,11 @@ async def get_ivi_films(message, headers):
     await bot.send_message(message.chat.id, s, parse_mode='HTML')
 
 
-# к сожалению на сайт не пускает
+# к сожалению на сайт не пускает(хотя отдельно от бота работает -_-)
 @dp.message_handler()
 async def parse_anime(message, headers):
     film = message['text']
-    print(film)
     url = 'https://yummyanime.club/search?word={}'.format(film)
-    print(url)
     async with aiohttp.ClientSession() as session:
         async with session.post(url, headers=headers) as resp:
             tran = await resp.text()
@@ -152,7 +146,6 @@ async def parse_anime(message, headers):
     async with aiohttp.ClientSession() as session:
         async with session.post(anime_adress, headers=headers) as next_resp:
             tran_next = await next_resp.text()
-    # resp_new = requests.get(film_adress)
     soap = BeautifulSoup(tran_next)
     info = soap.find('ul', {'class': 'content-main-info'})
     year = re.findall(r"Год: </span>(.*?)</li>", str(info))
@@ -173,7 +166,6 @@ async def parse_anime(message, headers):
     else:
         msg = "no anime"
 
-    print(msg)
     await bot.send_message(message.chat.id, msg, parse_mode='HTML')
 
 
