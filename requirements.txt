@@ -30,6 +30,6 @@ six==1.14.0
 soupsieve==1.9.5
 telegram==0.0.1
 updater==0.1.24
-urllib3==1.25.8
+urllib3==1.26.5
 watchdog==0.10.0
 yarl==1.4.2
